@@ -1,5 +1,7 @@
 package com.vendecartas.vpedido.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,12 +31,12 @@ public class PedidosController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<String> obterPedidos() {
+    public ResponseEntity<List<Pedido>> obterPedidos() {
         return pedidosService.obterPedidos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getPedido(@PathVariable String id) {
+    public ResponseEntity<Pedido> getPedido(@PathVariable String id) {
         return pedidosService.getPedido(id);
     }
     

@@ -9,7 +9,7 @@ import lombok.Data;
 public class Pedido {
     
     @Id
-    private Long id;
+    private String id;
     private String descricao;
     private Double valor;
 
