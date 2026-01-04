@@ -8,5 +8,4 @@ import com.vendecartas.vpedido.domain.dao.Pedido;
 @Repository
 public interface PedidosRepository extends JpaRepository<Pedido, String> {
 
-    
 } 
