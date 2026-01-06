@@ -9,20 +9,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vendecartas.vpedido.domain.dao.Pedido;
 import com.vendecartas.vpedido.exceptions.pedido.PedidoNotFoundException;
+import com.vendecartas.vpedido.mensaging.event.PedidoCriadoEvent;
+import com.vendecartas.vpedido.mensaging.producer.PedidoProducer;
 import com.vendecartas.vpedido.repository.PedidosRepository;
 
 @Service
 public class PedidosService {
     
     private PedidosRepository pedidosRepository;
+    private final PedidoProducer pedidoProducer;
 
-    public PedidosService(PedidosRepository pedidosRepository) {
+    public PedidosService(PedidosRepository pedidosRepository,PedidoProducer pedidoProducer) {
         this.pedidosRepository = pedidosRepository;
+        this.pedidoProducer = pedidoProducer;
     }
 
     @Transactional
     public ResponseEntity<Pedido> salvarPedido(Pedido pedido) {
-        return ResponseEntity.ok(pedidosRepository.save(pedido));
+        Pedido pedidoSalvo =  pedidosRepository.save(pedido);
+        pedidoProducer.enviar(new PedidoCriadoEvent(
+            pedidoSalvo.getId(),
+            pedidoSalvo.getDescricao(),
+            pedidoSalvo.getValor()
+        ));
+        return ResponseEntity.ok(pedido);
     }
 
     @Transactional(readOnly = true)
